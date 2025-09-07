@@ -14,23 +14,31 @@ from relationship_app.models import Author, Book, Library
 
 # 1. Query all books by a specific author
 def get_books_by_author(author_name):
-    author = Author.objects.get(name=author_name)   # required pattern
-    return author.books.all()                       # required pattern
+    # Style 1: get author then list their books
+    author = Author.objects.get(name=author_name)   # required
+    books_via_relation = author.books.all()         # required
+
+    # Style 2: filter directly using author instance
+    books_via_filter = Book.objects.filter(author=author)  # required
+
+    return books_via_relation, books_via_filter
 
 
 # 2. List all books in a library
 def get_books_in_library(library_name):
-    library = Library.objects.get(name=library_name)  # required pattern
-    return library.books.all()                        # required pattern
+    library = Library.objects.get(name=library_name)  # required
+    return library.books.all()                        # required
 
 
 # 3. Retrieve the librarian for a library
 def get_librarian_for_library(library_name):
-    library = Library.objects.get(name=library_name)  # consistent with style
-    return library.librarian                          # required pattern
+    library = Library.objects.get(name=library_name)  # required
+    return library.librarian                          # required
 
 
 if __name__ == "__main__":
-    print("📚 Books by Author:", list(get_books_by_author("John Doe")))
+    books1, books2 = get_books_by_author("John Doe")
+    print("📚 Books by Author (via relation):", list(books1))
+    print("📚 Books by Author (via filter):", list(books2))
     print("📚 Books in Library:", list(get_books_in_library("Central Library")))
     print("👨‍🏫 Librarian of Library:", get_librarian_for_library("Central Library"))
