@@ -30,11 +30,12 @@ def get_librarian_for_library(library_name):
     try:
         library = Library.objects.get(name=library_name)
         return library.librarian
-    except Library.DoesNotExist:
+    except (Library.DoesNotExist, AttributeError):
         return None
 
 
 if __name__ == "__main__":
-    print("Books by Author:", list(get_books_by_author("John Doe")))
-    print("Books in Library:", list(get_books_in_library("Central Library")))
-    print("Librarian of Library:", get_librarian_for_library("Central Library"))
+    # Example usage (replace names with real values from your DB)
+    print("📚 Books by Author:", list(get_books_by_author("John Doe")))
+    print("📚 Books in Library:", list(get_books_in_library("Central Library")))
+    print("👨‍🏫 Librarian of Library:", get_librarian_for_library("Central Library"))
