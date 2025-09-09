@@ -74,3 +74,10 @@ class Book(models.Model):
             ("can_edit_book", "Can edit book"),
             ("can_delete_book", "Can delete book"),
         ]
+class Book(models.Model):
+    # your existing fields stay as they are
+
+    class Meta:
+        permissions = [
+            ("can_change_book", "Can change book"),
+        ]
