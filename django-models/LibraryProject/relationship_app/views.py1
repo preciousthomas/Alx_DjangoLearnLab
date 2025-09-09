@@ -1,9 +1,8 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth import login
+from django.contrib.auth import login                         # ✅ required import
+from django.contrib.auth.forms import UserCreationForm        # ✅ required import
 from django.views.generic.detail import DetailView
 from .models import Library, Book
-
 
 def list_books(request):
     books = Book.objects.all()
