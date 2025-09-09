@@ -29,7 +29,9 @@ def list_books_in_library(library_name):
 def get_librarian_for_library(library_name):
     try:
         library = Library.objects.get(name=library_name)
-        return library.librarian
+        # Explicit query using Librarian.objects.get(library=...)
+        librarian = Librarian.objects.get(library=library)
+        return librarian
     except (Library.DoesNotExist, Librarian.DoesNotExist):
         return None
 
