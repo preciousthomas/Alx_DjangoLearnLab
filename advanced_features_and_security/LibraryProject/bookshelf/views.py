@@ -29,6 +29,7 @@ def delete_book(request, book_id):
 from django.shortcuts import render
 from .models import Book
 from django import forms
+from .forms import ExampleForm
 
 class SearchForm(forms.Form):
     q = forms.CharField(max_length=100, required=False)
@@ -40,3 +41,18 @@ def search_books(request):
         q = form.cleaned_data['q']
         books = Book.objects.filter(title__icontains=q)  # ORM prevents SQL injection
     return render(request, "bookshelf/book_list.html", {"books": books, "form": form})
+
+from django.shortcuts import render
+from .forms import ExampleForm
+
+def example_form_view(request):
+    if request.method == "POST":
+        form = ExampleForm(request.POST)
+        if form.is_valid():
+            # Process data safely
+            name = form.cleaned_data['name']
+            message = form.cleaned_data['message']
+            return render(request, "bookshelf/form_example.html", {"form": form, "success": True})
+    else:
+        form = ExampleForm()
+    return render(request, "bookshelf/form_example.html", {"form": form})
