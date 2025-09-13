@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h2>Book List</h2>
+
+  <!-- Search form -->
+  <form method="get">
+    {{ form.as_p }}
+    <button type="submit">Search</button>
+  </form>
+
+  <hr>
+
+  <!-- Book results -->
+  {% if books %}
+    <ul>
+      {% for book in books %}
+        <li>
+          <strong>{{ book.title }}</strong> by {{ book.author }}
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>No books found.</p>
+  {% endif %}
+{% endblock %}
