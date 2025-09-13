@@ -24,3 +24,19 @@ def delete_book(request, book_id):
     book = get_object_or_404(Book, id=book_id)
     book.delete()
     return redirect('book_list')
+
+# bookshelf/views.py (safe)
+from django.shortcuts import render
+from .models import Book
+from django import forms
+
+class SearchForm(forms.Form):
+    q = forms.CharField(max_length=100, required=False)
+
+def search_books(request):
+    form = SearchForm(request.GET)
+    books = []
+    if form.is_valid():
+        q = form.cleaned_data['q']
+        books = Book.objects.filter(title__icontains=q)  # ORM prevents SQL injection
+    return render(request, "bookshelf/book_list.html", {"books": books, "form": form})

@@ -124,3 +124,26 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = "bookshelf.CustomUser"
+
+# LibraryProject/settings.py
+
+# ⚠️ Important: In production, always set DEBUG = False
+DEBUG = False  
+
+# ✅ Browser security headers
+SECURE_BROWSER_XSS_FILTER = True
+X_FRAME_OPTIONS = "DENY"
+SECURE_CONTENT_TYPE_NOSNIFF = True
+
+# ✅ Force cookies over HTTPS
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
+
+# ✅ Example CSP (if using django-csp middleware)
+# INSTALLED_APPS += ['csp']
+# MIDDLEWARE.insert(0, 'csp.middleware.CSPMiddleware')
+
+# CSP_EXAMPLE (use with django-csp)
+CSP_DEFAULT_SRC = ("'self'",)
+CSP_SCRIPT_SRC = ("'self'", "https://trusted.cdn.com")
+CSP_STYLE_SRC = ("'self'", "https://fonts.googleapis.com")
