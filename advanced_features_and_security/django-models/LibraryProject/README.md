@@ -1,3 +1,0 @@
-#LibraryProject
-
-My new project 
