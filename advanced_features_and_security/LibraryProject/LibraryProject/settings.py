@@ -130,6 +130,13 @@ AUTH_USER_MODEL = "bookshelf.CustomUser"
 # ⚠️ Important: In production, always set DEBUG = False
 DEBUG = False  
 
+# ===============================
+# 🔐 HTTPS & Security Settings
+# ===============================
+
+# Redirect all HTTP traffic to HTTPS
+SECURE_SSL_REDIRECT = True
+
 # ✅ Browser security headers
 SECURE_BROWSER_XSS_FILTER = True
 X_FRAME_OPTIONS = "DENY"
