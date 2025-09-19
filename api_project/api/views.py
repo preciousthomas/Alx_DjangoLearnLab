@@ -1,6 +1,7 @@
 from django.http import JsonResponse
 from rest_framework import generics
 from rest_framework import viewsets
+from rest_framework.permissions import BasePermission, SAFE_METHODS
 from api.models import Book
 from .serializers import BookSerializer
 
@@ -14,3 +15,26 @@ class BookList(generics.ListAPIView):
 class BookViewSet(viewsets.ModelViewSet):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
+
+    from rest_framework import viewsets
+from rest_framework.permissions import IsAuthenticated
+from .serializers import BookSerializer
+from .models import Book
+
+class BookViewSet(viewsets.ModelViewSet):
+    queryset = Book.objects.all()
+    serializer_class = BookSerializer
+    permission_classes = [IsAuthenticated]  # only logged-in users can CRUD books
+
+    from rest_framework.permissions import SAFE_METHODS, BasePermission
+
+class IsAdminOrReadOnly(BasePermission):
+    def has_permission(self, request, view):
+        if request.method in SAFE_METHODS:
+            return True  # allow GET
+        return request.user and request.user.is_staff
+
+class BookViewSet(viewsets.ModelViewSet):
+    queryset = Book.objects.all()
+    serializer_class = BookSerializer
+    permission_classes = [IsAdminOrReadOnly]
