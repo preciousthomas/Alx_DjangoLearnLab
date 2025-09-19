@@ -5,6 +5,13 @@ from rest_framework.permissions import BasePermission, SAFE_METHODS
 from api.models import Book
 from .serializers import BookSerializer
 
+"""
+Authentication & Permissions:
+- TokenAuthentication is enabled (users must login via /api/auth/token/).
+- BookViewSet requires authentication for all actions.
+- You can customize permissions using DRF’s IsAuthenticated, IsAdminUser,
+  or custom rules (see IsAdminOrReadOnly).
+"""
 def home(request):
     return JsonResponse({"message": "Welcome to the API Project!"})
 
@@ -38,3 +45,13 @@ class BookViewSet(viewsets.ModelViewSet):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
     permission_classes = [IsAdminOrReadOnly]
+
+    from rest_framework import viewsets
+from rest_framework.permissions import IsAuthenticated
+from .serializers import BookSerializer
+from relationship_app.models import Book
+
+class BookViewSet(viewsets.ModelViewSet):
+    queryset = Book.objects.all()
+    serializer_class = BookSerializer
+    permission_classes = [IsAuthenticated]  # only logged-in users can CRUD books
