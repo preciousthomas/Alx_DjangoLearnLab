@@ -38,11 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    # Third-party
-    'rest_framework',
-
-    # Local apps
-    'api',
+    'rest_framework',  # Django REST Framework
+    'api',             # Your custom app
 ]
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
