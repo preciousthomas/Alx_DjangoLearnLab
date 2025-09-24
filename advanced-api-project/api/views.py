@@ -1,7 +1,7 @@
-from rest_framework import generics, permissions
+from rest_framework import generics
+from rest_framework import permissions
 from .models import Book
 from .serializers import BookSerializer
-
 
 # ---------------------------
 # List all books (public)
@@ -37,17 +37,17 @@ class BookCreateView(generics.CreateAPIView):
     CreateView: Allows authenticated users to add a new book.
     - Validates input via BookSerializer.
     """
-    queryset = Book.objects.all()
-    serializer_class = BookSerializer
-    permission_classes = [permissions.IsAuthenticated]
+queryset = Book.objects.all()
+serializer_class = BookSerializer
+permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
-    def perform_create(self, serializer):
-        """
-        Custom behavior:
-        - Hook called when saving a new object.
-        - Can add extra logic here (logging, attaching user, etc.).
-        """
-        serializer.save()
+def perform_create(self, serializer):
+    """
+    Custom behavior:
+    - Hook called when saving a new object.
+    - Can add extra logic here (logging, attaching user, etc.).
+    """
+    serializer.save()
 
 
 # ---------------------------
