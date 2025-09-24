@@ -1,5 +1,6 @@
 from rest_framework import generics, filters, permissions
 from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import viewsets, filters as drf_filters
 from .models import Book
 from .serializers import BookSerializer
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
@@ -113,7 +114,7 @@ class BookDeleteView(generics.DestroyAPIView):
 # Example: /api/books/?ordering=title
 # Example: /api/books/?ordering=-publication_year
 from rest_framework import viewsets
-from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from .models import Book
 from .serializers import BookSerializer
 
@@ -123,3 +124,14 @@ class BookViewSet(viewsets.ModelViewSet):
     serializer_class = BookSerializer
     # Example: allow read for everyone, but write only for authenticated users
     permission_classes = [IsAuthenticatedOrReadOnly]
+    from django_filters import rest_framework as filters
+from rest_framework import viewsets
+from .models import Book
+from .serializers import BookSerializer
+class BookViewSet(viewsets.ModelViewSet):
+    queryset = Book.objects.all()
+    serializer_class = BookSerializer
+    filter_backends = [filters.DjangoFilterBackend, drf_filters.SearchFilter, drf_filters.OrderingFilter]
+    filterset_fields = ['title', 'author', 'publication_year']  # exact filters
+    search_fields = ['title', 'author']  # partial match search
+    ordering_fields = ['publication_year', 'title']  # sorting
