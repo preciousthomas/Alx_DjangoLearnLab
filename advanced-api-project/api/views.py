@@ -4,6 +4,7 @@ from rest_framework import viewsets, filters as drf_filters
 from .models import Book
 from .serializers import BookSerializer
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
+from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
 
 class BookListView(generics.ListAPIView):
     queryset = Book.objects.all()
@@ -135,3 +136,15 @@ class BookViewSet(viewsets.ModelViewSet):
     filterset_fields = ['title', 'author', 'publication_year']  # exact filters
     search_fields = ['title', 'author']  # partial match search
     ordering_fields = ['publication_year', 'title']  # sorting
+    from rest_framework import viewsets
+from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
+from .models import Book
+from .serializers import BookSerializer
+
+
+class BookViewSet(viewsets.ModelViewSet):
+    queryset = Book.objects.all()
+    serializer_class = BookSerializer
+
+    # Allow read access to everyone, but restrict write access to authenticated users
+    permission_classes = [IsAuthenticatedOrReadOnly]
