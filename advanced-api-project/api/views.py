@@ -1,22 +1,26 @@
-from rest_framework import generics, filters
-from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
+from rest_framework import generics, filters, permissions
 from django_filters.rest_framework import DjangoFilterBackend
-from .models import Book  # Import the Book model
-# ---------------------------
-# List all books (public)
-# ---------------------------
-class BookListView(generics.ListAPIView):
-    """
-    ListView: Returns all books.
-    - Accessible by anyone (authenticated or not).
-    """
-    queryset = Book.objects.all()
-    serializer_class = BookSerializer
-    permission_classes = [permissions.AllowAny]
+from .models import Book
+from .serializers import BookSerializer
+
+
 class BookListView(generics.ListAPIView):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
-    permission_classes = [IsAuthenticatedOrReadOnly]
+
+    # Add filtering, searching, and ordering
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
+
+    # Step 1: Filtering fields
+    filterset_fields = ['title', 'author', 'publication_year']
+
+    # Step 2: Search fields
+    search_fields = ['title', 'author']
+
+    # Step 3: Ordering fields
+    ordering_fields = ['title', 'publication_year']
+    ordering = ['title']  # default ordering
+
 
     # Enable filtering, searching, ordering
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
@@ -96,3 +100,15 @@ class BookDeleteView(generics.DestroyAPIView):
     # Filtering: /books/?author=John&publication_year=2020
 # Searching: /books/?search=Python
 # Ordering: /books/?ordering=title or /books/?ordering=-publication_year
+## Filtering, Searching, and Ordering
+
+### Filtering
+# Example: /api/books/?author=Chinua Achebe
+# Example: /api/books/?publication_year=2005
+
+### Searching
+# Example: /api/books/?search=Things
+
+### Ordering
+# Example: /api/books/?ordering=title
+# Example: /api/books/?ordering=-publication_year
