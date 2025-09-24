@@ -2,7 +2,7 @@ from rest_framework import generics, filters, permissions
 from django_filters.rest_framework import DjangoFilterBackend
 from .models import Book
 from .serializers import BookSerializer
-
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
 
 class BookListView(generics.ListAPIView):
     queryset = Book.objects.all()
@@ -112,3 +112,14 @@ class BookDeleteView(generics.DestroyAPIView):
 ### Ordering
 # Example: /api/books/?ordering=title
 # Example: /api/books/?ordering=-publication_year
+from rest_framework import viewsets
+from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
+from .models import Book
+from .serializers import BookSerializer
+
+
+class BookViewSet(viewsets.ModelViewSet):
+    queryset = Book.objects.all()
+    serializer_class = BookSerializer
+    # Example: allow read for everyone, but write only for authenticated users
+    permission_classes = [IsAuthenticatedOrReadOnly]
