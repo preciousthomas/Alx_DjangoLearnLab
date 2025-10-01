@@ -118,3 +118,4 @@ urlpatterns += [
     # search
     path('search/', PostSearchView.as_view(), name='post-search'),
 ]
+path('search/', views.search_posts, name='search_posts'),
