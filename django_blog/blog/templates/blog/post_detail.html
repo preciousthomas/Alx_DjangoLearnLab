@@ -14,3 +14,37 @@
   <p><a href="{% url 'blog:post_list' %}">← Back to all posts</a></p>
 </article>
 {% endblock %}
+<hr>
+<section id="comments">
+  <h3>Comments ({{ post.comments.count }})</h3>
+
+  {% for comment in post.comments.all %}
+    <div class="comment">
+      <p><strong>{{ comment.author.username }}</strong> 
+         <small>{{ comment.created_at|date:"M j, Y H:i" }}{% if comment.updated_at and comment.updated_at != comment.created_at %} (edited){% endif %}</small>
+      </p>
+      <div class="comment-body">{{ comment.content|linebreaks }}</div>
+
+      {% if user.is_authenticated and comment.author == user %}
+        <p>
+          <a href="{% url 'blog:comment_update' comment.pk %}">Edit</a> |
+          <a href="{% url 'blog:comment_delete' comment.pk %}">Delete</a>
+        </p>
+      {% endif %}
+      <hr>
+    </div>
+  {% empty %}
+    <p>No comments yet — be the first to comment!</p>
+  {% endfor %}
+
+  {% if user.is_authenticated %}
+    <h4>Leave a comment</h4>
+    <form method="post" action="{% url 'blog:comment_create' post.pk %}">
+      {% csrf_token %}
+      {{ comment_form.as_p }}
+      <button type="submit">Post comment</button>
+    </form>
+  {% else %}
+    <p><a href="{% url 'blog:login' %}?next={{ request.path }}">Log in</a> to leave a comment.</p>
+  {% endif %}
+</section>
