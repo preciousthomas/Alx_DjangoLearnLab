@@ -1,0 +1,15 @@
+{% extends "blog/base.html" %}
+{% block content %}
+<h1>Search results for "{{ query }}"</h1>
+
+<form method="get" action="{% url 'blog:post-search' %}">
+  <input name="q" value="{{ query }}" placeholder="Search posts or tags..." />
+  <button type="submit">Search</button>
+</form>
+
+{% if posts %}
+  {% include 'blog/post_list_items.html' with posts=posts %}
+{% else %}
+  <p>No results found.</p>
+{% endif %}
+{% endblock %}

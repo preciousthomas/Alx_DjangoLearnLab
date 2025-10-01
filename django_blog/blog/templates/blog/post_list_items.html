@@ -1,0 +1,17 @@
+{# Create blog/templates/blog/post_list_items.html #}
+{% for post in posts %}
+  <article>
+    <h2><a href="{% url 'blog:post-detail' post.pk %}">{{ post.title }}</a></h2>
+    <p class="meta">By {{ post.author.username }} — {{ post.published_date|date:"M j, Y" }}</p>
+    <p>{{ post.content|truncatechars:200 }}</p>
+    <p>
+      Tags:
+      {% for pt in post.post_tags.all %}
+        <a href="{% url 'blog:posts-by-tag' pt.tag.slug %}">{{ pt.tag.name }}</a>{% if not forloop.last %}, {% endif %}
+      {% empty %}
+        <em>No tags</em>
+      {% endfor %}
+    </p>
+  </article>
+  <hr>
+{% endfor %}

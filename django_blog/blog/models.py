@@ -55,3 +55,37 @@ class Comment(models.Model):
 
     def __str__(self):
         return f'Comment by {self.author.username} on {self.post.title}'
+    # Append to blog/models.py
+
+from django.db import models
+from django.utils.text import slugify
+
+class Tag(models.Model):
+    name = models.CharField(max_length=50, unique=True)
+    slug = models.SlugField(max_length=60, unique=True, blank=True)
+
+    class Meta:
+        ordering = ['name']
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.name)
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return self.name
+
+
+class PostTag(models.Model):
+    """
+    Link table between Post and Tag.
+    We keep this separate so we don't need to alter the existing Post model.
+    """
+    post = models.ForeignKey('Post', on_delete=models.CASCADE, related_name='post_tags')
+    tag = models.ForeignKey(Tag, on_delete=models.CASCADE, related_name='tag_posts')
+
+    class Meta:
+        unique_together = ('post', 'tag')
+
+    def __str__(self):
+        return f"{self.post.title} <-> {self.tag.name}"

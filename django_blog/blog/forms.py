@@ -86,3 +86,21 @@ class CommentForm(forms.ModelForm):
     class Meta:
         model = Comment
         fields = ['content']
+        # Append to blog/forms.py
+
+from django import forms
+from .models import Tag, PostTag
+
+class TagInputField(forms.CharField):
+    """
+    Simple helper field that accepts comma-separated tags.
+    We'll parse into Tag objects in the view.
+    """
+    def __init__(self, *args, **kwargs):
+        kwargs.setdefault('required', False)
+        kwargs.setdefault('widget', forms.TextInput(attrs={'placeholder': 'comma, separated, tags'}))
+        super().__init__(*args, **kwargs)
+
+
+class ManageTagsForm(forms.Form):
+    tags = TagInputField(label='Tags (comma-separated)', max_length=200)

@@ -1,0 +1,11 @@
+{% extends "blog/base.html" %}
+{% block content %}
+<h1>Manage tags for: {{ view.post.title }}</h1>
+
+<form method="post">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <button type="submit">Save tags</button>
+  <a href="{% url 'blog:post-detail' view.post.pk %}">Cancel</a>
+</form>
+{% endblock %}

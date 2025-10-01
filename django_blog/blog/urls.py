@@ -103,3 +103,18 @@ urlpatterns = [
     path('comment/<int:pk>/update/', views.CommentUpdateView.as_view(), name='comment-update'),
     path('comment/<int:pk>/delete/', views.CommentDeleteView.as_view(), name='comment-delete'),
 ]
+# Append to blog/urls.py
+
+from .views import TagListView, PostsByTagView, ManagePostTagsView, PostSearchView
+
+urlpatterns += [
+    # tags
+    path('tags/', TagListView.as_view(), name='tag-list'),
+    path('tags/<slug:tag_slug>/', PostsByTagView.as_view(), name='posts-by-tag'),
+
+    # manage tags per post (author only)
+    path('post/<int:pk>/tags/manage/', ManagePostTagsView.as_view(), name='manage-post-tags'),
+
+    # search
+    path('search/', PostSearchView.as_view(), name='post-search'),
+]
