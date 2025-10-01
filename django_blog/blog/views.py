@@ -1,31 +1,17 @@
-# blog/views.py (append or add)
-
-from django.shortcuts import render, redirect
-from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
-from .forms import CustomUserCreationForm, ProfileForm
-
-def register_view(request):
-    if request.method == "POST":
-        form = CustomUserCreationForm(request.POST)
-        if form.is_valid():
-            user = form.save()
-            # log the user in after registration
-            login(request, user)
-            return redirect("blog:profile")
-    else:
-        form = CustomUserCreationForm()
-    return render(request, "registration/register.html", {"form": form})
+from django.shortcuts import render, redirect
+from django.contrib.auth.models import User
+from django.contrib import messages
+from .forms import UserUpdateForm
 
 @login_required
-def profile_view(request):
-    profile = request.user.profile
-    if request.method == "POST":
-        pform = ProfileForm(request.POST, request.FILES, instance=profile)
-        if pform.is_valid():
-            pform.save()
-            return redirect("blog:profile")
+def profile(request):
+    if request.method == 'POST':
+        form = UserUpdateForm(request.POST, instance=request.user)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Your profile has been updated!')
+            return redirect('profile')
     else:
-        pform = ProfileForm(instance=profile)
-
-    return render(request, "blog/profile.html", {"pform": pform})
+        form = UserUpdateForm(instance=request.user)
+    return render(request, 'blog/profile.html', {'form': form})
