@@ -104,3 +104,21 @@ class TagInputField(forms.CharField):
 
 class ManageTagsForm(forms.Form):
     tags = TagInputField(label='Tags (comma-separated)', max_length=200)
+    from django import forms
+from .models import Post, Comment
+from taggit.forms import TagWidget   # ✅ import TagWidget
+
+
+class PostForm(forms.ModelForm):
+    class Meta:
+        model = Post
+        fields = ['title', 'content', 'tags']   # ✅ include tags
+        widgets = {
+            'tags': TagWidget(),   # ✅ enable TagWidget for nicer input
+        }
+
+
+class CommentForm(forms.ModelForm):
+    class Meta:
+        model = Comment
+        fields = ['content']
