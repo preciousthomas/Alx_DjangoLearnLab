@@ -259,3 +259,19 @@ def search_posts(request):
         ).distinct()
 
     return render(request, 'blog/search_results.html', {'results': results, 'query': query})
+from django.views.generic import ListView
+from .models import Post
+
+class PostByTagListView(ListView):
+    model = Post
+    template_name = "blog/posts_by_tag.html"
+    context_object_name = "posts"
+
+    def get_queryset(self):
+        tag_name = self.kwargs.get("tag_name")
+        return Post.objects.filter(tags__name=tag_name).distinct()
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["tag_name"] = self.kwargs.get("tag_name")
+        return context

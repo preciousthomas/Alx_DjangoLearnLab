@@ -119,3 +119,9 @@ urlpatterns += [
     path('search/', PostSearchView.as_view(), name='post-search'),
 ]
 path('search/', views.search_posts, name='search_posts'),
+from .views import PostByTagListView
+
+urlpatterns = [
+    # ... existing urls
+    path('tags/<str:tag_name>/', PostByTagListView.as_view(), name='posts_by_tag'),
+]
