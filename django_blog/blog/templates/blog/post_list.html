@@ -1,0 +1,32 @@
+{% extends "blog/base.html" %}
+{% block content %}
+<h1>All Posts</h1>
+
+{% for post in posts %}
+  <article>
+    <h2><a href="{% url 'blog:post_detail' post.pk %}">{{ post.title }}</a></h2>
+    <p class="meta">By {{ post.author.username }} — {{ post.published_date|date:"M j, Y" }}</p>
+    <p>{{ post.content|truncatechars:200 }}</p>
+    <a href="{% url 'blog:post_detail' post.pk %}">Read more</a>
+    {% if user.is_authenticated and post.author == user %}
+      • <a href="{% url 'blog:post_update' post.pk %}">Edit</a>
+      • <a href="{% url 'blog:post_delete' post.pk %}">Delete</a>
+    {% endif %}
+  </article>
+  <hr>
+{% empty %}
+  <p>No posts yet.</p>
+{% endfor %}
+
+{% if is_paginated %}
+  <div class="pagination">
+    {% if page_obj.has_previous %}<a href="?page={{ page_obj.previous_page_number }}">Previous</a>{% endif %}
+    <span> Page {{ page_obj.number }} / {{ page_obj.paginator.num_pages }} </span>
+    {% if page_obj.has_next %}<a href="?page={{ page_obj.next_page_number }}">Next</a>{% endif %}
+  </div>
+{% endif %}
+
+{% if user.is_authenticated %}
+  <p><a href="{% url 'blog:post_create' %}">Create new post</a></p>
+{% endif %}
+{% endblock %}
