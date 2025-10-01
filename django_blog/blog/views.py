@@ -1,17 +1,16 @@
-from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
-from django.contrib.auth.models import User
 from django.contrib import messages
-from .forms import UserUpdateForm
+from django.contrib.auth import login
+from .forms import UserRegisterForm
 
-@login_required
-def profile(request):
+def register(request):
     if request.method == 'POST':
-        form = UserUpdateForm(request.POST, instance=request.user)
+        form = UserRegisterForm(request.POST)
         if form.is_valid():
-            form.save()
-            messages.success(request, 'Your profile has been updated!')
+            user = form.save()
+            login(request, user)  # Auto-login after successful registration
+            messages.success(request, 'Your account has been created successfully!')
             return redirect('profile')
     else:
-        form = UserUpdateForm(instance=request.user)
-    return render(request, 'blog/profile.html', {'form': form})
+        form = UserRegisterForm()
+    return render(request, 'blog/register.html', {'form': form})
