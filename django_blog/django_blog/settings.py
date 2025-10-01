@@ -83,7 +83,16 @@ DATABASES = {
 }
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
-
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'blogdb',        # database name
+        'USER': 'postgres',      # your postgres username
+        'PASSWORD': 'yourpassword',  # your postgres password
+        'HOST': 'localhost',     # keep as localhost
+        'PORT': '5432',          # default PostgreSQL port
+    }
+}
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
