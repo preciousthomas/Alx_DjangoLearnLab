@@ -60,6 +60,16 @@ DATABASES = {
         'PORT': os.getenv('DB_PORT', '5432'),  # ✅ add this line
     }
 }
+# Static files (CSS, JavaScript, Images)
+STATIC_URL = '/static/'
+
+# ✅ Add this line
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+
+# Optional but recommended
+STATICFILES_DIRS = [
+    BASE_DIR / 'static',
+]
 # Application definition
 
 INSTALLED_APPS = [
@@ -72,7 +82,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'accounts',
     'posts',
-    'notifications',   # ✅ must be here
+    'notifications',
 ]
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
@@ -80,7 +90,6 @@ REST_FRAMEWORK = {
     ],
 }
 INSTALLED_APPS += [
-    'posts',
     'django_filters',       # for filtering (if you want search/filter features)
 ]
 REST_FRAMEWORK.update({
