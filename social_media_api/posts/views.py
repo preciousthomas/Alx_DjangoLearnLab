@@ -4,6 +4,9 @@ from rest_framework.pagination import PageNumberPagination
 from .models import Post, Comment
 from .serializers import PostSerializer, CommentSerializer
 from .permissions import IsOwnerOrReadOnly
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework.views import APIView   # ✅ add this line
 
 class SmallResultsSetPagination(PageNumberPagination):
     page_size = 10
@@ -60,3 +63,19 @@ class CommentViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
+        from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import permissions, status
+from .models import Post
+from .serializers import PostSerializer
+
+class FeedView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request):
+        """Return posts from users that the current user follows."""
+        user = request.user
+        following_users = user.following.all()  # users the current user follows
+        posts = Post.objects.filter(author__in=following_users).order_by('-created_at')
+        serializer = PostSerializer(posts, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
