@@ -12,3 +12,13 @@ class IsOwnerOrReadOnly(permissions.BasePermission):
             return True
         # Write permissions only to the author
         return getattr(obj, 'author', None) == request.user
+    from rest_framework import permissions
+
+class IsOwnerOrReadOnly(permissions.BasePermission):
+    """
+    Allow only authors to edit or delete their own posts or comments.
+    """
+    def has_object_permission(self, request, view, obj):
+        if request.method in permissions.SAFE_METHODS:
+            return True
+        return obj.author == request.user
